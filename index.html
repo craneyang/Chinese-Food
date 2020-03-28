@@ -1,0 +1,1253 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		
+		<title>SkyTech Food</title>
+		
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		
+		<!-- shortcut icon -->
+		<link rel="shortcut icon" href="SkyTech-Logo-200px.png" type="image/vnd.microsoft.icon">
+		
+		<style>
+		html, body {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			font-family: Helvetica, Calibri, Roboto, Open Sans, sans-serif
+			-webkit-backface-visibility: hidden;
+		}
+		* {
+			box-sizing: inherit;
+		}
+		h1 {
+			text-align: center;
+		}
+		svg {
+			margin:auto;
+			display:block;
+		}
+
+		.circle-overlay {
+			font-size: 16px;
+			border-radius: 50%;
+			position: absolute;
+			overflow: hidden;
+			/*it's buggy with the foreignObject background right now*/
+			/*background-color: rgba(255,240,245,0.5);*/
+		}
+		
+		.circle-overlay__inner {
+			text-align: center;
+			width: 100%;
+			height: 100%;
+		}
+
+		.hidden {
+			display: none;
+		}
+		.node-icon--faded {
+			opacity: 0.5;
+			width:150px;
+			height:150px;
+			
+		}
+		.legend-size circle {
+			fill: rgb(31, 119, 180);
+		}
+		
+   	    .tooltip {
+		  position: absolute;
+		  text-align: center;
+		  width: 400px;
+		  height: 400px;
+		  padding: 8px;
+		  font: 24px sans-serif;
+		  background: white;
+		  border: solid 1px #aaa;
+		  border-radius: 8px;
+		  pointer-events: none;
+		}
+
+		text {
+		font: 13px Comic Sans MS;
+		fill: black;
+		}
+
+		rect.background {
+		fill: white;
+		}
+
+		.axis {
+		
+		fill: gray;
+		opacity: 0.8;
+		}
+
+		.axis path,
+		.axis line {
+		fill: none;
+		stroke: #000;
+		}
+		</style>
+	</head>
+	
+<body class="is-preload">
+	
+		<!-- Header -->
+			<header id="header">
+				<h1><em>SkyTech Food</em></h1>
+				<nav>
+					<ul>
+						<li><a href="#intro">Intro</a></li>
+						<li><a href="#one">Top Restaurants</a></li>
+						<li><a href="#two">Special Dish</a></li>
+						<li><a href="#Three">Catering Income</a></li>
+						<li><a href="#Four">Eight Cuisines</a></li>
+						<li><a href="#Five">Contact</a></li>
+						<!-- <li><a href="mailto:nus.skytech@gmail.com?subject=Feedback%20of%20SkyTech%20Food">Contact</a></li> -->
+					</ul>
+				</nav>
+			</header>
+
+		<!-- Intro -->
+			<section id="intro" class="main style1 dark fullscreen">
+					<div class="content">
+					<header>
+						<h2>Chinese Food Market:<br>Huge and Competitive</h2>
+					</header>
+					<p>
+					In this year, in the process of showing new changes in the national economic structure 
+					and promoting the high-quality development of the economy, the contribution rate of consumption 
+					to economic growth continued to increase. As the income of the people increased and the size of 
+					the middle-income group expanded, the consumption structure of catering showed a trend to convert 
+					to diversification, specialization, quality upgrading and quality brand catering leading. 
+					The catering industry has played a strong role in expanding domestic demand, promoting consumption, 
+					stabilizing growth, and benefiting people's livelihood. Meanwhile, the catering market continues to 
+					show steady growth.
+					</p>
+					
+					
+					<footer>
+						<a href="#one" class="button style2 down">More</a>
+					</footer>
+				</div>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="main style2 right dark fullscreen">
+
+
+				<!--<div>-->
+				<svg width="100%" height="750" font-family="sans-serif" font-size="10" text-anchor="left" id="svg1"></svg>
+				<!--</div>-->
+				
+				<div class="content">
+					<header>
+						<h2>How many top restaurants in each province ?</h2>
+					</header>
+					<p> At present, mass consumption in the catering industry has reached 80%, 
+						and fast food, group meals, hot pot, snacks, shopping malls, and leisure catering businesses are booming. 
+						The proportion of high-end consumption has fallen, and people's common consumption has become the mainstream.
+						At the same time, the booming catering market has also promoted the development of the catering group. 
+						Many powerful catering companies have expanded and opened branches across the country, with growing profits 
+						and increasing brand value. However, the birthplaces of large companies are basically in the economically 
+						developed provinces of China. You can view the distribution of the top 100 catering companies in China by
+						 clicking on the circle on the left.
+					</p>
+				
+		<script>
+		// Based loosely from this D3 bubble graph https://bl.ocks.org/mbostock/4063269
+		// And this Forced directed diagram https://bl.ocks.org/mbostock/4062045
+		let data = [
+		//Beijing
+		{
+			cat: 'Capital', name: 'Beijing', value: 19, id: 11,
+			icon: 'myimg/Beijing.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 18`
+		}, 
+		//	Anhui Province
+		{
+			cat: 'East China', name: 'Anhui', value: 4, id: 34,
+			icon: 'myimg/anhui.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 3`
+		}, 
+		//Fujian
+		{
+			cat: 'East China', name: 'Fujian', value: 4, id: 35, 
+			icon: 'myimg/fujian.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 3 
+			`
+		}, 
+		//Guangdong
+		{
+			cat: 'South China', name: 'Guangdong', value: 11, id: 44, 
+			icon: 'myimg/guangdong.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 10
+			`
+		}, 
+		//Gansu
+		{
+			cat: 'North-west China', name: 'Gansu', value: 1, id:62,
+			icon: 'myimg/gansu.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		},
+		//Guizhou
+		{
+			cat: 'South-west China', name: 'Guizhou', value: 1, id: 52,
+			icon: 'myimg/guizhou.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0`
+		}, 
+		//Henan
+		{
+			cat: 'Central China', name: 'Henan', value: 3, id: 41,
+			icon: 'myimg/henan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 2
+			`
+		}, 
+		//Hubei
+		{
+			cat: 'Central China', name: 'Hubei', value: 6, id: 42, 
+			icon: 'myimg/hubei.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 5
+			`
+		}, 
+		//Hebei
+		{
+			cat: 'North China', name: 'Hebei', value: 2, id: 13,
+			icon: 'myimg/hebei.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, 
+		//Hainan
+		{
+			cat: 'South China', name: 'Hainan', value: 2, id: 46,
+			icon: 'myimg/Hainan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, /*{
+			cat: 'framework', name: 'Trails.JS', value: 10,
+			icon: '',
+		},*/ 
+		//Heilongjiang
+		{
+			cat: 'North-east China', name: 'Heilongjiang', value: 3, id: 23,
+			icon: 'myimg/heilongjiang.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 2
+			`
+		}, 
+		//Hunan
+		{
+			cat: 'Central China', name: 'Hunan', value: 3, id: 43,
+			icon: 'myimg/hunan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 2
+			`
+		}, 
+		//Jilin
+		{
+			cat: 'North-east China', name: 'Jilin', value: 2, id: 22,
+			icon: 'myimg/jilin.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, /*{
+			cat: 'framework', name: 'Foundation', value: 10,
+			icon: '',
+		},*/
+		//Jiangsu
+		{
+			cat: 'East China', name: 'Jiangsu', value: 8, id: 32, 
+			icon: 'myimg/jiangsu.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 7
+			`
+		}, 
+		//Jiangxi
+		{
+			cat: 'East China', name: 'Jiangxi', value: 1, id: 36,
+			icon: 'myimg/jiangxi.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, /*{
+			cat: 'framework', name: 'SenchaTouch', value: 10,
+			icon: '',
+		},*/ 
+		//Liaoning
+		{
+			cat: 'North-east China', name: 'Liaoning', value: 1, id: 21, 
+			icon: 'myimg/liaoning.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Qinghai
+		{
+			cat: 'North-west China', name: 'Qinghai', value: 1, id:63,
+			icon: 'myimg/qinghai.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Sichuan
+		{
+			cat: 'South-west China', name: 'Sichuan', value: 6, id:51,
+			icon: 'myimg/sichuan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 5
+			`
+		}, 
+		//Shandong
+		{
+			cat: 'East China', name: 'Shandong', value: 4, id: 37, 
+			icon: 'myimg/shandong.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 3
+			`
+		}, 
+		//Shaanxi
+		{
+			cat: 'North-west China', name: 'Shaanxi', value: 2, id: 61,
+			icon: 'myimg/shaanxi.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, 
+		//Shanxi
+		{
+			cat: 'North China', name: 'Shanxi', value: 1, id: 14,
+			icon: 'myimg/shanxi.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Yunan
+		{
+			cat: 'South-west China', name: 'Yunan', value: 1, id:53,
+			icon: 'myimg/yunnan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Zhejiang
+		{
+			cat: 'East China', name: 'Zhejiang', value: 11, id: 33,
+			icon: 'myimg/zhejiang.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 10
+			`
+		}, 
+		//Taiwan
+		{
+			cat: 'East China', name: 'Taiwan', value: 2, id: 71,
+			icon: 'myimg/taiwan.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, 
+		//Shanghai
+		{
+			cat: 'East China', name: 'Shanghai', value: 15, id: 31,
+			icon: 'myimg/shanghai.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 14
+			`
+		}, 
+		//Tianjing
+		{
+			cat: 'North China', name: 'Tianjing', value: 3, id: 12,
+			icon: 'myimg/tianjin.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 2
+			`
+		}, 
+		//Chongqing
+		{
+			cat: 'South-west China', name: 'Chongqing', value: 8, id: 50,
+			icon: 'myimg/chongqing.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 7
+			`
+		}, 
+		//Inner Mongolia
+		{
+			cat: 'North China', name: 'Inner Mongolia', value: 2, id: 15,
+			icon: 'myimg/neimenggu.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		}, 
+		//Ningxia Hui 
+		{
+			cat: 'North-west China', name: 'Ningxia Hui ', value: 1, id: 64,
+			icon: 'myimg/ningxia.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Xinjiang Uyghur 
+		{
+			cat: 'North-west China', name: 'Xinjiang Uyghur', value: 1, id: 65,
+			icon: 'myimg/xinjiang.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Guangxi Zhuang
+		{
+			cat: 'South China', name: 'Guangxi Zhuang', value: 1, id:45,
+			icon: 'myimg/Guangxi.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Tibet
+		{
+			cat: 'South-west China', name: 'Tibet', value: 1, id:54,
+			icon: 'myimg/xizang.png',
+			icon: 'myimg/xizang.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 0
+			`
+		}, 
+		//Hong Kong
+		{
+			cat: 'South China', name: 'Hong Kong', value: 2, id: 81,
+			icon: 'myimg/xianggang.png',
+			desc: `
+				Number of China's Top 100 Restaurants : 1
+			`
+		},
+		//Macau
+		{
+			cat: 'South China', name: 'Macau', value: 1, id: 82,
+			icon: 'myimg/aomen.png',
+			desc: `
+			Number of China's Top 100 Restaurants : 0
+			`
+		}];
+		</script>
+	
+			<script src="js/d3.min.js"></script>
+			<script src="js/d3-legend.min.js"></script>
+					
+		<script>
+		d3version1 = d3;
+		window.d3 = null;
+		//console.log(document.body.clientWidth);
+		
+		let svg1 = d3version1.select("#svg1");
+		//console.log(document.getElementById("svg1").clientHeight);
+		//let width = +svg1.attr('width');
+		let width = document.body.clientWidth; // get width in pixels
+		let height = +svg1.attr('height');
+		console.log(+svg1.attr('width'));
+		let centerX = width * 0.3;
+		let centerY = height * 0.5;
+		let strength = 0.05;
+		let focusedNode;
+
+		let format = d3version1.format(',d');
+
+		let scaleColor = d3version1.scaleOrdinal(d3version1.schemeCategory20);
+
+		// use pack to calculate radius of the circle
+		let pack = d3version1.pack()
+			.size([width , height ])
+			.padding(1.5);
+
+		let forceCollide = d3version1.forceCollide(d => d.r + 1);
+
+		// use the force
+		let simulation = d3version1.forceSimulation()
+			// .force('link', d3version1.forceLink().id(d => d.id))
+			.force('charge', d3version1.forceManyBody())
+			.force('collide', forceCollide)
+			// .force('center', d3version1.forceCenter(centerX, centerY))
+			.force('x', d3version1.forceX(centerX ).strength(strength))
+			.force('y', d3version1.forceY(centerY ).strength(strength));
+
+		// reduce number of circles on mobile screen due to slow computation
+		if ('matchMedia' in window && window.matchMedia('(max-device-width: 767px)').matches) {
+			data = data.filter(el => {
+				return el.value >= 50;
+			});
+		}
+
+		let root = d3version1.hierarchy({ children: data })
+			.sum(d => d.value);
+
+		// we use pack() to automatically calculate radius conveniently only
+		// and get only the leaves
+		let nodes = pack(root).leaves().map(node => {
+			console.log('node:', node.x, (node.x - centerX) * 2);
+			const data = node.data;
+			return {
+				x: centerX + (node.x - centerX) * 3, // magnify start position to have transition to center movement
+				y: centerY + (node.y - centerY) * 3,
+				r: 0, // for tweening
+				radius: node.r, //original radius
+				id: data.cat + '.' + (data.name.replace(/\s/g, '-')),
+				cat: data.cat,
+				name: data.name,
+				value: data.value,
+				id2: data.id,
+				icon: data.icon,
+				desc: data.desc,
+			}
+		});
+		simulation.nodes(nodes).on('tick', ticked);
+
+		svg1.style('background-color', 'transparent');
+		let node = svg1.selectAll('.node')
+			.data(nodes)
+			.enter().append('g')
+			.attr('class', 'node')
+			.call(d3version1.drag()
+				.on('start', (d) => {
+				console.log(d3version1.event);
+					if (!d3version1.event.active) simulation.alphaTarget(0.2).restart();
+					d.fx = d.x;
+					d.fy = d.y;
+				})
+				.on('drag', (d) => {
+					d.fx = d3version1.event.x;
+					d.fy = d3version1.event.y;
+				})
+				.on('end', (d) => {
+					if (!d3version1.event.active) simulation.alphaTarget(0);
+					d.fx = null;
+					d.fy = null;
+				}));
+
+		node.append('circle')
+			.attr('id', d => d.id)
+			.attr('r', 0)
+			.style('fill', d => scaleColor(d.cat))
+			.transition().duration(2000).ease(d3version1.easeElasticOut)
+				.tween('circleIn', (d) => {
+					//console.log("circleIn");
+					let i = d3version1.interpolateNumber(0, d.radius);
+					return (t) => {
+						d.r = i(t);
+						simulation.force('collide', forceCollide);
+					}
+				})
+
+		node.append('clipPath')
+			.attr('id', d => `clip-${d.id}`)
+			.append('use')
+			.attr('xlink:href', d => `#${d.id}`);
+
+		// display text as circle icon
+		node.filter(d => !String(d.icon).includes('img/'))
+			.append('text')
+			.classed('node-icon', true)
+			.attr('clip-path', d => `url(#clip-${d.id})`)
+			.selectAll('tspan')
+			.data(d => d.icon.split(';'))
+			.enter()
+				.append('tspan')
+				.attr('x', 0)
+				.attr('y', (d, i, nodes) => (13 + (i - nodes.length / 2 - 0.5) * 10))
+				.text(name => name);
+
+		// display image as circle icon
+		node.filter(d => String(d.icon).includes('img/'))
+			.append('image')
+			.classed('node-icon', true)
+			.attr('clip-path', d => `url(#clip-${d.id})`)
+			.attr('xlink:href', d => d.icon)
+			.attr('x', d => - d.radius * 0.7)
+			.attr('y', d => - d.radius * 0.7)
+			.attr('height', d => d.radius * 2 * 0.7)
+			.attr('width', d => d.radius * 2 * 0.7)
+			
+
+		node.append('title')
+			.text(d => (d.cat + '::' + d.name + '\n' + format(d.value)));
+
+			//add legend
+		let legendOrdinal = d3version1.legendColor()
+			.scale(scaleColor)
+			.shape('circle');
+
+		let legend = svg1.append('g')
+			.classed('legend-color', true)
+			.attr('text-anchor', 'start')
+			.attr('transform','translate(20,30)')
+			.style('font-size','14px')
+			.call(legendOrdinal);
+
+		let sizeScale = d3version1.scaleOrdinal()
+  			.domain(['Less Popular', 'More Popular'])
+  			.range([5, 10] );
+
+		let legendSize = d3version1.legendSize()
+			.scale(sizeScale)
+			.shape('circle')
+			.shapePadding(10)
+			.labelAlign('end');
+
+		let legend2 = svg1.append('g')
+			.classed('legend-size', true)
+			.attr('text-anchor', 'start')
+			.attr('transform', 'translate(150, 25)')
+			.style('font-size', '14px')
+			.call(legendSize);
+
+
+		/*
+		<foreignObject class="circle-overlay" x="10" y="10" width="100" height="150">
+			<div class="circle-overlay__inner">
+				<h2 class="circle-overlay__title">ReactJS</h2>
+				<p class="circle-overlay__body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam, sunt, aspernatur. Autem repudiandae, laboriosam. Nulla quidem nihil aperiam dolorem repellendus pariatur, quaerat sed eligendi inventore ipsa natus fugiat soluta doloremque!</p>
+			</div>
+		</foreignObject>
+		*/
+		let infoBox = node.append('foreignObject')
+			.classed('circle-overlay hidden', true)
+			.attr('x', -350 * 0.5 * 0.8)
+			.attr('y', -350 * 0.5 * 0.8)
+			.attr('height', 350 * 0.8)
+			.attr('width', 350 * 0.8)
+				.append('xhtml:div')
+				.classed('circle-overlay__inner', true);
+
+		infoBox.append('h4')
+			.classed('circle-overlay__title', true)
+			.text(d => d.name);
+
+		infoBox.append('p')
+			.classed('circle-overlay__body', true)
+			.html(d => d.desc);
+
+
+		node.on('click', (currentNode) => {
+			
+			d3version1.event.stopPropagation();
+			console.log('currentNode', currentNode);
+			let currentTarget = d3version1.event.currentTarget; // the <g> el
+
+			if (currentNode === focusedNode) {
+				// no focusedNode or same focused node is clicked
+				return;
+			}
+			let lastNode = focusedNode;
+			focusedNode = currentNode;
+
+			simulation.alphaTarget(0.2).restart();
+			// hide all circle-overlay
+			d3version1.selectAll('.circle-overlay').classed('hidden', true);
+			d3version1.selectAll('.node-icon').classed('node-icon--faded', false)
+							.attr('x', d => - d.radius * 0.7)
+							.attr('y', d => - d.radius * 0.7)
+							.attr('height', d => d.radius * 2 * 0.7)
+							.attr('width', d => d.radius * 2 * 0.7);
+
+			// don't fix last node to center anymore
+			if (lastNode) {
+				lastNode.fx = null;
+				lastNode.fy = null;
+				node.filter((d, i) => i === lastNode.index)
+					.transition().duration(2000).ease(d3version1.easePolyOut)
+					.tween('circleOut', () => {
+						let irl = d3version1.interpolateNumber(lastNode.r, lastNode.radius);
+						<!-- d.select('.node-icon') -->
+						<!-- .classed('node-icon--faded', false) -->
+							<!-- .attr('x', d => - d.radius * 0.7) -->
+							<!-- .attr('y', d => - d.radius * 0.7) -->
+							<!-- .attr('height', d => d.radius * 2 * 0.7) -->
+							<!-- .attr('width', d => d.radius * 2 * 0.7);  -->
+						console.log('circleOut');
+						return (t) => {
+							lastNode.r = irl(t);
+						}
+					
+					})
+					.on('interrupt', () => {
+						lastNode.r = lastNode.radius;
+						console.log('interrupt');
+					});
+			}
+
+			// if (!d3version1.event.active) simulation.alphaTarget(0.5).restart();
+
+			d3version1.transition().duration(2000).ease(d3version1.easePolyOut)
+				.tween('moveIn', () => {
+					console.log('tweenMoveIn', currentNode);
+					let ix = d3version1.interpolateNumber(currentNode.x, centerX);
+					let iy = d3version1.interpolateNumber(currentNode.y, centerY);
+					let ir = d3version1.interpolateNumber(currentNode.r, centerY * 0.5);
+					return function (t) {
+						// console.log('i', ix(t), iy(t));
+						currentNode.fx = ix(t);
+						currentNode.fy = iy(t);
+						currentNode.r = ir(t);
+						simulation.force('collide', forceCollide);
+					};
+				})
+				.on('end', () => {
+					simulation.alphaTarget(0);
+					let $currentGroup = d3version1.select(currentTarget);
+					$currentGroup.select('.circle-overlay')
+						.classed('hidden', false);
+					$currentGroup.select('.node-icon')
+						.classed('node-icon--faded', true)
+						.attr('x', -150)
+						.attr('y', -150)
+						.attr("width", 300)
+						.attr("height", 300);
+
+				})
+				.on('interrupt', () => {
+					console.log('move interrupt', currentNode);
+					currentNode.fx = null;
+					currentNode.fy = null;
+					simulation.alphaTarget(0);
+				});
+
+		});
+
+		// blur
+		
+		d3version1.select(document).on('click', () => {
+		console.log(d3version1.event);
+			let target = d3version1.event.target;
+			// check if click on document but not on the circle overlay
+			if (!target.closest('#circle-overlay') && focusedNode) {
+				focusedNode.fx = null;
+				focusedNode.fy = null;
+				simulation.alphaTarget(0.2).restart();
+				d3version1.transition().duration(1600).ease(d3version1.easePolyOut)
+					.tween('moveOut', function () {
+						console.log('tweenMoveOut', focusedNode);
+						let ir = d3version1.interpolateNumber(focusedNode.r, focusedNode.radius);
+						return function (t) {
+							focusedNode.r = ir(t);
+							simulation.force('collide', forceCollide);
+						};
+					})
+					.on('end', () => {
+						focusedNode = null;
+						simulation.alphaTarget(0);
+					})
+					.on('interrupt', () => {
+						simulation.alphaTarget(0);
+					});
+
+				// hide all circle-overlay
+				d3version1.selectAll('.circle-overlay').classed('hidden', true);
+				d3version1.selectAll('.node-icon').classed('node-icon--faded', false)
+							.attr('x', d => - d.radius * 0.7)
+							.attr('y', d => - d.radius * 0.7)
+							.attr('height', d => d.radius * 2 * 0.7)
+							.attr('width', d => d.radius * 2 * 0.7);
+			}
+		});
+
+		function ticked() {
+			node
+				.attr('transform', d => `translate(${d.x},${d.y})`)
+				.select('circle')
+					.attr('r', d => d.r);
+
+			//console.log("ticked");
+		}
+		
+	
+		</script>
+				</div>
+				<a href="#two" class="button style2 down anchored">Next</a>
+			</section>
+
+		<!-- Two -->
+			<section id="two" class="main style2 left dark fullscreen">
+				<div id="china-map"></div>
+				<div class="content box style2">
+					<header>
+						<h2>What is the Represenative Dish in each province ?</h2>
+					</header>
+					<p>Although the catering industry's contribution to GDP is less than 5%, 
+						the catering industry's revenue growth rate has clearly exceeded the GDP growth rate, 
+						and in recent years, except for 2013, it has maintained a high-speed growth of more than double digits. 
+						Because of the vast territory, there are countless foods in all provinces of China.
+						 Click to find the representative dish in this province.
+					</p>
+				
+				<!-- add china-map -->
+				<script src="https://d3js.org/d3.v3.min.js"></script>	
+				<script>
+
+			var width1  = 1000,
+			height1 = 900,
+			centered;
+
+			var svg = d3.select("#china-map").append("svg")
+				.attr("width", width1)
+				.attr("height", height1)
+				.append("g")
+				.attr("transform", "translate(0,0)");
+
+			var projection = d3.geo.mercator()
+				.center([107, 31])
+				.scale(800)
+				.translate([width1/2, height1/2]);
+
+			var path = d3.geo.path()
+				.projection(projection);
+
+			//var color = d3.scale.category10();
+
+			d3.json("https://gist.githubusercontent.com/kyroskoh/8c4a697f33e77696a9e53792a62f0b8d/raw/55f4485d25d5ff5d25b81aaa382d813d24c726df/china.json", function(error, root) {
+			  if (error) return console.error(error);
+
+			  //Tool tip
+			  var tooltip = d3.select("body")
+			  .append("div")
+			  .attr("class","tooltip")
+			  .style("opacity", 0);
+
+			  //Draw Map
+			  svg.selectAll("path")
+				.data(root.features)
+				.enter()
+				.append("path")
+				.attr("stroke","#85929E")
+				.attr("stroke-width",1)
+				.attr("fill", function(d,i){
+				  return "#D6EAF8";
+				})
+				.attr("d", path )
+				.on("mouseover",function(d,i){
+				  d3.select(this).attr("fill","#F1948A");
+
+				/*tooltip.append("img")
+					.attr("src", d.properties.image);*/
+				  
+				  tooltip.transition()
+					.duration(200)
+					.style("opacity", .9);
+
+					var imageString = "<img src='" + d.properties.image + "' height= '300' width='300'/>";
+					
+				  //tooltip.html(d.properties.name + "<br>" + imageString)
+				  //console.log("Image URL: " + JSON.stringify(d.properties));
+				    //tooltip.html("<div id='thumbnail'><span>" + d.properties.name + "</span><img src='" + d.properties.image + "' /></div>")
+				    //tooltip.html(d.properties.name)
+				    tooltip.html(d.properties.name + "<br>" + imageString)
+					.style("left", (d3.event.pageX) + "px")
+					.style("top", (d3.event.pageY - 28) + "px");
+				})
+				.on("mouseout",function(d,i){
+				  d3.select(this).attr("fill","#D6EAF8");
+				  tooltip.transition()
+						 .duration(500)
+						 .style("opacity", 0);
+				})
+				.on("click", clicked);
+			});
+			function clicked(d) {
+			  var x, y, k;
+
+			  if (d && centered !== d) {
+				var centroid = path.centroid(d);
+				x = centroid[0];
+				y = centroid[1];
+				k = 4;
+				centered = d;
+			  } 
+			  
+			  else {
+				x = width1 / 2;	
+				y = height1 / 2;
+				k = 1;
+				centered = null;
+			  }
+
+			  svg.selectAll("path")
+				  .classed("active", centered && function(d) { return d === centered; });
+
+			  svg.transition()
+				  .duration(750)
+				  .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+				  .style("stroke-width", 1 / k + "px");
+			}
+
+			</script>
+				
+				</div>
+				<a href="#Three" class="button style2 down anchored">Next</a>
+			</section>
+
+		<!-- Three -->
+			<section id="Three" class="main style3 primary">
+				<div class="content">
+					<header>
+						<h2> Which province earns more catering money?</h2>
+						<p>
+						In 2017, the national catering income was 3.9644 trillion yuan, with a year-on-year increase of 10.7%, 
+						which is higher than the total retail sales of consumer goods in the same period.
+						The characteristics of high quality and characteristic development of dinner are obvious; 
+						group meal has become the fastest growing catering industry; the growth of hot pot category has slowed down,
+						 and direct sales have become mainstream; fast food has been continuously concentrated under the support of 
+						 central kitchen and supply chain; online takeaway market maintains high speed Growth; new catering has become 
+						 a major driver of industry innovation. You can check the province's food income in 2017 by clicking the bar below.
+						</p>
+					</header>
+					
+					<h1>Provincial GDP and Income of Catering</h1>
+						<p><i>(click the bar!)</i></p>
+					<script>	
+
+					var margin = {top: 20, right: 200, bottom: 0, left: 200},
+						width2 = 1000 - margin.left - margin.right,
+						height2 = 300 - margin.top - margin.bottom;
+
+					var x = d3.scale.linear()
+						.range([0, width2]);
+
+					var barHeight = 30;
+
+					var color = d3.scale.ordinal()
+						.range(["#F1948A", "#ccc"]);
+
+					var duration = 750,
+						delay = 25;
+
+					var partition = d3.layout.partition()
+						.value(function(d) { return d.size; });
+
+					var xAxis = d3.svg.axis()
+						.scale(x)
+						.orient("top");
+						
+
+					var svg2 = d3.select("body").append("svg")
+						.attr("width", width2 + margin.left + margin.right)
+						.attr("height", height2 + margin.top + margin.bottom)
+					    .append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+					svg2.append("rect")
+						.attr("class", "background")
+						.attr("width", width2)
+						.attr("height", height2)
+						.on("click", up);
+
+					svg2.append("g")
+						.attr("class", "x axis");
+
+					svg2.append("g")
+						.attr("class", "y axis")
+						.append("line")
+						.attr("y1", "100%");
+
+					d3.json("https://gist.githubusercontent.com/kyroskoh/136f8646ca9fbcc41d87c0086852de7a/raw/28ea6c6c2c136d793241607dd4f50fdb9dab4e63/readme.json", function(error, root) {
+					  if (error) throw error;
+
+					  partition.nodes(root);
+					  x.domain([0, root.value]).nice();
+					  down(root, 0);
+					});
+
+					function down(d, i) {
+					  if (!d.children || this.__transition__) return;
+					  var end = duration + d.children.length * delay;
+
+					  // Mark any currently-displayed bars as exiting.
+					  var exit = svg2.selectAll(".enter")
+						  .attr("class", "exit");
+
+					  // Entering nodes immediately obscure the clicked-on bar, so hide it.
+					  exit.selectAll("rect").filter(function(p) { return p === d; })
+						  .style("fill-opacity", 1e-6);
+
+					  // Enter the new bars for the clicked-on data.
+					  // Per above, entering bars are immediately visible.
+					  var enter = bar(d)
+						  .attr("transform", stack(i))
+						  .style("opacity", 1);
+
+					  // Have the text fade-in, even though the bars are visible.
+					  // Color the bars as parents; they will fade to children if appropriate.
+					  enter.select("text").style("fill-opacity", 1e-6);
+					  enter.select("rect").style("fill", color(true));
+
+					  // Update the x-scale domain.
+					  x.domain([0, d3.max(d.children, function(d) { return d.value; })]).nice();
+
+					  // Update the x-axis.
+					  svg2.selectAll(".x.axis").transition()
+						  .duration(duration)
+						  .call(xAxis);
+						//add number  
+
+					  // Transition entering bars to their new position.
+					  var enterTransition = enter.transition()
+						  .duration(duration)
+						  .delay(function(d, i) { return i * delay; })
+						  .attr("transform", function(d, i) { return "translate(0," + barHeight * i * 1.2 + ")"; });
+
+					  // Transition entering text.
+					  enterTransition.select("text")
+						  .style("fill-opacity", 1);
+
+					  // Transition entering rects to the new x-scale.
+					  enterTransition.select("rect")
+						  .attr("width", function(d) { return x(d.value); })
+						  .style("fill", function(d) { return color(!!d.children); });
+
+					  // Transition exiting bars to fade out.
+					  var exitTransition = exit.transition()
+						  .duration(duration)
+						  .style("opacity", 1e-6)
+						  .remove();
+
+					  // Transition exiting bars to the new x-scale.
+					  exitTransition.selectAll("rect")
+						  .attr("width", function(d) { return x(d.value); });
+
+					  // Rebind the current node to the background.
+					  svg2.select(".background")
+						  .datum(d)
+						  .transition()
+						  .duration(end);
+
+					  d.index = i;
+					}
+
+					function up(d) {
+					  if (!d.parent || this.__transition__) return;
+					  var end = duration + d.children.length * delay;
+
+					  // Mark any currently-displayed bars as exiting.
+					  var exit = svg2.selectAll(".enter")
+						  .attr("class", "exit");
+
+					  // Enter the new bars for the clicked-on data's parent.
+					  var enter = bar(d.parent)
+						  .attr("transform", function(d, i) { return "translate(0," + barHeight * i * 1.2 + ")"; })
+						  .style("opacity", 1e-6);
+
+					  // Color the bars as appropriate.
+					  // Exiting nodes will obscure the parent bar, so hide it.
+					  enter.select("rect")
+						  .style("fill", function(d) { return color(!!d.children); })
+						.filter(function(p) { return p === d; })
+						  .style("fill-opacity", 1e-6);
+
+					  // Update the x-scale domain.
+					  x.domain([0, d3.max(d.parent.children, function(d) { return d.value; })]).nice();
+
+					  // Update the x-axis.
+					  svg2.selectAll(".x.axis").transition()
+						  .duration(duration)
+						  .call(xAxis);
+
+					  // Transition entering bars to fade in over the full duration.
+					  var enterTransition = enter.transition()
+						  .duration(end)
+						  .style("opacity", 1);
+
+					  // Transition entering rects to the new x-scale.
+					  // When the entering parent rect is done, make it visible!
+					  enterTransition.select("rect")
+						  .attr("width", function(d) { return x(d.value); })
+						  .each("end", function(p) { if (p === d) d3.select(this).style("fill-opacity", null); });
+
+					  // Transition exiting bars to the parent's position.
+					  var exitTransition = exit.selectAll("g").transition()
+						  .duration(duration)
+						  .delay(function(d, i) { return i * delay; })
+						  .attr("transform", stack(d.index));
+
+					  // Transition exiting text to fade out.
+					  exitTransition.select("text")
+						  .style("fill-opacity", 1e-6);
+
+					  // Transition exiting rects to the new scale and fade to parent color.
+					  exitTransition.select("rect")
+						  .attr("width", function(d) { return x(d.value); })
+						  .style("fill", color(true));
+
+					  // Remove exiting nodes when the last child has finished transitioning.
+					  exit.transition()
+						  .duration(end)
+						  .remove();
+
+					  // Rebind the current parent to the background.
+					  svg2.select(".background")
+						  .datum(d.parent)
+						  .transition()
+						  .duration(end);
+					}
+
+					// Creates a set of bars for the given data node, at the specified index.
+					function bar(d) {
+					  var bar = svg2.insert("g", ".y.axis")
+						  .attr("class", "enter")
+						  .attr("transform", "translate(0,5)")
+						  .selectAll("g")
+						  .data(d.children)
+						  .enter().append("g")
+						  .style("cursor", function(d) { return !d.children ? null : "pointer"; })
+						  .on("click", down);
+
+					  bar.append("text")
+						  .attr("x", -6)
+						  .attr("y", barHeight / 2)
+						  .attr("dy", ".35em")
+						  .style("text-anchor", "end")
+						  .text(function(d) { return d.name; });
+
+					  bar.append("rect")
+						  .attr("width", function(d) { return x(d.value); })
+						  .attr("height", barHeight);
+						
+						
+						//for(i=0;i<d.children.length;i++){
+						bar.append("text")
+							 .attr("dy", ".75em")
+							 .attr("y",10)
+							 .attr("x", function(d) { return 50; })//(x(d.x1) - x(d.x0)) / 2
+							 .attr("text-anchor", "middle")
+							 .text(function(d) { 
+								console.log(d.value);
+								return d.value; 
+							 });
+							 console.log(d.children[0].value);
+							 //console.log();
+							// console.log(i);
+						//}
+						
+					  return bar;
+					}
+					// A stateful closure for stacking bars horizontally.
+					function stack(i) {
+					  var x0 = 0;
+					  return function(d) {
+						var tx = "translate(" + x0 + "," + barHeight * i * 1.2 + ")";
+						x0 += x(d.value);
+						return tx;
+					  };
+					}
+					</script>
+				</div>
+			</section>
+
+		<!-- Four -->
+			<section id="Four" class="main style3 secondary">
+				<div class="content">
+					<header>
+						<h2>Eight Cuisines</h2>
+						<p>As the saying goes, "to the people foodstuff is all important." In China, although everyone has a consistent emphasis on “eat”, the food, cooking techniques and flavours vary greatly from place to place, and “cooking” is the most direct feature of this regional difference in diet.As a country with long history of catering, the variety of Chinese dishes, the wide variety of tastes, and the intricate and complicated practices are second to none in the world. For a long time, dishes from all over China have been influenced by local environment, climate, property, customs and eating habits, forming a variety of local flavours. The four major cuisines of Lu, Su, Yue and Sichuan formed an earlier history, and later differentiated the local cuisines of Zhejiang, Fujian, Hunan and Anhui, thus forming China's “eight major cuisines”.</p>
+					</header>
+					
+						<!-- Eight Cusines -->
+						<div class="gallery">
+							<article class="from-left">
+								<a href="myimg/Chuan.png" class="image fit" ><img src="http://www.51pptmoban.com/d/file/2017/06/04/81796f21d11ae4888124d11cb567195b.jpg" title="Sichuan Cuisine" alt=""  /></a>
+							</article>
+							<article class="from-right">
+								<a href="myimg/Lu.png" class="image fit" ><img src="http://www.51pptmoban.com/d/file/2017/06/04/e764256ed1c75de1ff553321fa42ea44.jpg" title="Shandong Cuisine" alt="" /></a>
+							</article>
+							<article class="from-left">
+								<a href="myimg/Hui.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/2b1e60ad3dbdbece9d4031440b7562a7.jpg" title="Anhui  Cuisine" alt="" /></a>
+							</article>
+							<article class="from-right">
+								<a href="myimg/Xiang.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/8328d62aaac478a461bc898beb9e3a88.jpg" title="Hunan Cuisine" alt="" /></a>
+							</article>
+							<article class="from-left">
+								<a href="myimg/Zhe.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/4f98d6eb7e8e6f38faed0b2bf60f1226.jpg" title=" Zhejiang Cuisine" alt="" /></a>
+							</article>
+							<article class="from-right">
+								<a href="myimg/Su.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/edfb86cafe55627c4a3d5ade3a698124.jpg" title="Jiangsu Cuisine" alt="" /></a>
+							</article>
+							<article class="from-left">
+								<a href="myimg/Min.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/4779c380df2883c6996e96dfa8f4e8e8.jpg" title="Fujian Cuisine" alt="" /></a>
+							</article>
+							<article class="from-right">
+								<a href="myimg/Yue.png" class="image fit"><img src="http://www.51pptmoban.com/d/file/2017/06/04/8e9b33a865438207ce9c2f48d59f750a.jpg" title=" Cantonese Cuisine" alt="" /></a>
+							</article>
+						</div>
+						
+					<p>The "eight major cuisines" are various systems, representing different customs and cultural 
+						characteristics of different places, but in the end, they are all Chinese people's attention
+						 and love for "eat". Enjoying the food has become a way of life, a fashion, which not only promote 
+						 consumption but also accelerate the development of the national catering industry.
+					</p>
+
+				</div>
+			</section>
+			<!-- Five -->	
+			<section id="Five" class="main style3 primary">
+				<div class="content">
+
+					<p><strong>Are You A Foodie? Do You Like Chinese Food? Tell us!</strong></p>
+					
+					<div class="box">
+						<form method="post" action="mailto:yanght1995@126.com" enctype="text/plain">
+							<div class="fields">
+								<div class="field half"><input type="text" name="name" placeholder="Name" /></div>
+								<div class="field half"><input type="email" name="email" placeholder="Email" /></div>
+								<div class="field"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
+							</div>
+							<ul class="actions special">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</form>
+					</div>
+	
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+
+				<!-- Icons -->
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+						<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+						<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+						<li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+					</ul>
+
+				<!-- Menu -->
+					<ul class="menu">
+						<li>&copy; SkyTech Food</li><li> An Alliance of: <a href="mailto:yanght1995@gmail.com">SkyTech Group</a></li>
+					</ul>
+
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.poptrox.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
